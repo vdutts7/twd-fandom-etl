@@ -1,5 +1,6 @@
 # Fandom ETL
 
+## Setup
 ```
 conda create --name torch-env python=3.9
 conda activate torch-env
