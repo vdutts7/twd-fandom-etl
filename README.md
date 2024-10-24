@@ -49,3 +49,8 @@ python src/update_name_kv.py
 ```
 python src/delete_first_kv.py
 ```
+
+9. Upsert to Pinecone (vector DB):
+```
+python src/upsert.py
+```
