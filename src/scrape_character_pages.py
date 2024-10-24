@@ -29,13 +29,27 @@ def scrape_and_save_character_page(name, url):
             print(f"No content section found for {name}")
             return
 
-        # Extract all text content within the mw-parser-output div
-        text_content = content_section.get_text(separator='\n').strip()
+        # Initialize a dictionary to store section content
+        sections = {}
 
-        # Save the text content to a .txt file
-        output_path = os.path.join(output_dir, f"{name.replace(' ', '_')}.txt")
-        with open(output_path, 'w', encoding='utf-8') as file:
-            file.write(text_content)
+        # Iterate over all <h2> tags to find sections
+        for header in content_section.find_all('h2'):
+            section_title = header.get_text().strip()
+            section_content = []
+
+            # Get the next siblings until the next <h2> or end of the section
+            for sibling in header.find_next_siblings():
+                if sibling.name == 'h2':
+                    break
+                if sibling.name in ['p', 'ul', 'dl']:
+                    section_content.append(sibling.get_text(separator='\n').strip())
+
+            # Store the section content in the dictionary
+            sections[section_title] = '\n'.join(section_content)
+
+        # Save the sections to a CSV file
+        output_path = os.path.join(output_dir, f"{name.replace(' ', '_')}.csv")
+        pd.DataFrame([sections]).to_csv(output_path, index=False)
         
         print(f"Successfully saved {name}'s page content to {output_path}")
 
