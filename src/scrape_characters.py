@@ -42,4 +42,4 @@ df = pd.DataFrame(character_links)
 # Save to a CSV file in the 'data' directory
 df.to_csv('./data/character_data_with_images.csv', index=False)
 
-print("Character data saved to ../data/character_data_with_images.csv")
+print("Character data saved to ./data/character_data_with_images.csv")
