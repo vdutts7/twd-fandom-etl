@@ -31,24 +31,27 @@ def generate_embedding(query):
 def to_ascii(text):
     return unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('ascii')
 
-def search_characters(query, top_k=5):
-    # Generate the embedding for the query using the same model as the one used for upserting
+def search_characters(query, trait=None, top_k=5):
     query_vector = generate_embedding(query)
     
-    # Query Pinecone index
     results = index.query(
         vector=query_vector,
         top_k=top_k,
         include_metadata=True
     )
+    
+    if trait:
+        filtered_results = [r for r in results['matches'] if trait.lower() in r['metadata'].get('Overview[]', '').lower()]
+        return filtered_results[:top_k]
     return results['matches']
 
 st.title("The Walking Dead Character Search")
 
 query = st.text_input("Enter your search query:")
+trait = st.text_input("Enter a character trait or role (optional):")
 
 if query:
-    results = search_characters(query)
+    results = search_characters(query, trait)
     
     for result in results:
         st.subheader(result['metadata'].get('Name', 'Unknown'))
