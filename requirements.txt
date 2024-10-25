@@ -3,3 +3,5 @@ requests
 pandas
 streamlit
 pinecone-client>=2.2.1
+python-dotenv
+openai
