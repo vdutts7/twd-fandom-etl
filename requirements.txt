@@ -5,3 +5,4 @@ streamlit
 pinecone-client>=2.2.1
 python-dotenv
 openai
+sentence_transformers
