@@ -8,6 +8,7 @@ conda install pytorch torchvision torchaudio -c pytorch
 pip install beautifulsoup4 requests sentence-transformers pinecone-client pandas
 ```
 
+
 ## Steps
 
 1. Crawl all character pages
