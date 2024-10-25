@@ -1,5 +1,5 @@
 beautifulsoup4
 requests
-sentence-transformers
-pinecone-client
 pandas
+streamlit
+pinecone-client>=2.2.1
