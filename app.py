@@ -69,41 +69,84 @@ def generate_ai_response(query, search_results):
     
     return response.choices[0].message.content.strip()
 
-st.title("The Walking Dead Character Search")
+# Set page config
+st.set_page_config(page_title="The Walking Dead Character Search", layout="wide", initial_sidebar_state="expanded")
 
-query = st.text_input("Enter your search query:")
-trait = st.text_input("Enter a character trait or role (optional):")
+# Custom CSS for dark maroon background
+st.markdown("""
+    <style>
+    .stApp {
+        background-color: #4A0E0E;
+        color: #FFFFFF;
+    }
+    .stButton>button {
+        background-color: #800000;
+        color: #FFFFFF;
+    }
+    .stTextInput>div>div>input {
+        background-color: #2B0000;
+        color: #FFFFFF;
+    }
+    .stTextArea>div>div>textarea {
+        background-color: #2B0000;
+        color: #FFFFFF;
+    }
+    .stSelectbox>div>div>select {
+        background-color: #2B0000;
+        color: #FFFFFF;
+    }
+    .sidebar .sidebar-content {
+        background-color: #1A0000;
+    }
+    header {
+        display: none;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+st.markdown("<h1 style='text-align: center; color: #FFD700;'>The Walking Dead Character Database</h1>", unsafe_allow_html=True)
+
+query = st.text_input("Enter your search query:", key="query_input")
+trait = st.text_input("Enter a character trait or role (optional):", key="trait_input")
 
 if query:
     results = search_characters(query, trait)
     
     # Generate AI response
     ai_response = generate_ai_response(query, results)
-    st.subheader("AI Response:")
+    st.markdown("<h2 style='color: #FFD700;'>AI Response:</h2>", unsafe_allow_html=True)
     st.write(ai_response)
     
-    st.subheader("Search Results:")
+    st.markdown("<h2 style='color: #FFD700;'>Search Results:</h2>", unsafe_allow_html=True)
     for result in results:
-        st.subheader(result['metadata'].get('Name', 'Unknown'))
+        st.markdown(f"<h3 style='color: #FFD700;'>{result['metadata'].get('Name', 'Unknown')}</h3>", unsafe_allow_html=True)
         st.write(f"Similarity Score: {result['score']:.2f}")
         
         overview = result['metadata'].get('Overview[]', 'No overview available.')
         st.write(overview[:200] + "..." if len(overview) > 200 else overview)
         
         with st.expander("More Details"):
-            st.write("Pre-Apocalypse:")
+            st.markdown("<h4 style='color: #FFD700;'>Pre-Apocalypse:</h4>", unsafe_allow_html=True)
             st.write(result['metadata'].get('Pre-Apocalypse[]', 'No information available.'))
             
-            st.write("Post-Apocalypse:")
+            st.markdown("<h4 style='color: #FFD700;'>Post-Apocalypse:</h4>", unsafe_allow_html=True)
             st.write(result['metadata'].get('Post-Apocalypse[]', 'No information available.'))
             
-            st.write("Killed Victims:")
+            st.markdown("<h4 style='color: #FFD700;'>Killed Victims:</h4>", unsafe_allow_html=True)
             st.write(result['metadata'].get('Killed Victims[]', 'No information available.'))
             
-            st.write("Trivia:")
+            st.markdown("<h4 style='color: #FFD700;'>Trivia:</h4>", unsafe_allow_html=True)
             st.write(result['metadata'].get('Trivia[]', 'No trivia available.'))
         
-        st.write("---")
+        st.markdown("---")
+
+st.sidebar.markdown("""
+    <style>
+    .sidebar .sidebar-content {
+        background-color: #1A0000;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
 st.sidebar.title("About")
 st.sidebar.info("This app allows you to search for characters from The Walking Dead TV series. Enter a query to find characters with similar attributes or storylines.")
